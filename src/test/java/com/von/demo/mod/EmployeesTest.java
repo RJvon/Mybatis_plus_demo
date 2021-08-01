@@ -1,5 +1,6 @@
 package com.von.demo.mod;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.von.demo.mod.entity.Employees;
 import com.von.demo.mod.mapper.EmployeesMapper;
 import org.junit.jupiter.api.Test;
@@ -79,6 +80,40 @@ public class EmployeesTest {
     }
 
     // 条件构造器
+    /*
+        查询名字叫王某某且性别为男的人
+    */
+    @Test
+    public void selectWrapper01() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.likeRight("name", "王");
+        queryWrapper.eq("sex", true);
+        List list = employeesMapper.selectList(queryWrapper);
+        list.forEach(System.out::println);
+    }
 
-
+    /**
+     * 查询姓赵的，出生日期在1995-10-1-14-46-56到2019-10-1-14-46-56出生的人
+     */
+    @Test
+    public void selectWrapper02() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.likeRight("name", "赵");
+        LocalDateTime time1 = LocalDateTime.of(1995, Month.SEPTEMBER, 10, 14, 46, 56);
+        LocalDateTime time2 = LocalDateTime.of(2019, Month.SEPTEMBER, 10, 14, 46, 56);
+        queryWrapper.between("birth", time1, time2);
+        List list = employeesMapper.selectList(queryWrapper);
+        list.forEach(System.out::println);
+    }
+    /**
+     * 查询姓李的，电话号码不为空的人
+     */
+    @Test
+    public void selectWrapper03() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.likeRight("name", "李");
+        queryWrapper.isNotNull("tel");
+        List list = employeesMapper.selectList(queryWrapper);
+        list.forEach(System.out::println);
+    }
 }
